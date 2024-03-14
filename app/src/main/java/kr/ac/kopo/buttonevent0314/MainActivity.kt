@@ -11,6 +11,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import kr.ac.kopo.buttonevent0314.databinding.ActivityMainBinding
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var btn911 : Button
     lateinit var btnGallery : Button
     lateinit var btnFinish : Button
+    lateinit var btnListener : View.OnClickListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,24 +33,27 @@ class MainActivity : AppCompatActivity() {
         btnGallery = findViewById(R.id.buttonGallery)
         btnFinish = findViewById(R.id.buttonFinish)
 
-        btn.setOnClickListener {
-            Toast.makeText(applicationContext, "오후의 홍자", Toast.LENGTH_SHORT).show()
+        btnListener = View.OnClickListener {
+            when(it.id){
+                R.id.buttonHome -> intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.kopo.ac.kr/jungsu/index.do"))
+                R.id.button911 -> intent = Intent(Intent.ACTION_VIEW, Uri.parse("tel:/911"))
+                R.id.buttonGallery -> intent = Intent(Intent.ACTION_VIEW, Uri.parse("content://media/internal/images/media"))
+
+            }
+            startActivity(intent)
         }
 
-        btnHome.setOnClickListener {
-            var intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.kopo.ac.kr/jungsu/index.do"))
-            startActivity(intent)
-        }
-        btn911.setOnClickListener {
-            var intent = Intent(Intent.ACTION_VIEW, Uri.parse("tel:/911"))
-            startActivity(intent)
-        }
-        btnGallery.setOnClickListener {
-            var intent = Intent(Intent.ACTION_VIEW, Uri.parse("content://media/internal/images/media"))
-            startActivity(intent)
-        }
+        btnHome.setOnClickListener(btnListener)
+        btn911.setOnClickListener(btnListener)
+        btnGallery.setOnClickListener(btnListener)
+
         btnFinish.setOnClickListener {
             finish()
+        }
+
+        btn.setOnClickListener {
+            Toast.makeText(applicationContext, "오후의 홍자", Toast.LENGTH_SHORT).show()
+
         }
     }
 }
